@@ -21,25 +21,31 @@
 
     <div class="row container d-flex justify-content-center m-5">
       <div class="w-50">
-        <input id = 'name' type="text" placeholder="your name" />
-        <div class="input-group justify-content-center">
-          <input type="text" class="form-control" placeholder="" id="msg" />
-          <button class="btn btn-primary" onclick="send()">send</button>
-        </div>
+        <form onsubmit="return onSubmit(event)">
+          <input id="name" type="text" placeholder="Enter your name" required />
+          <div class="input-group justify-content-center">
+            <input type="text" class="form-control" placeholder="" id="msg" />
+            <button type="submit" class="btn btn-primary" onclick="send()">
+              send
+            </button>
+          </div>
+        </form>
       </div>
     </div>
     <div id="greeting"></div>
     <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
     <script>
-      const socket = io();
       function send() {
         let msg = document.getElementById("msg").value;
-        const name = document.getElementById('name').value;
-        socket.emit("chat", name+"=>"+msg);
+        const name = document.getElementById("name").value;
+        socket.emit("chat", name + "=>" + msg);
         document.getElementById("msg").value = "";
       }
+      function onSubmit(event) {
+        event.preventDefault();
+      }
+      const socket = io();
       socket.on("reply", (data) => {
-        console.log(data);
         const parentDiv = document.querySelector("#chatHis");
         const childDiv = document.createElement("li");
         childDiv.innerHTML = data;
